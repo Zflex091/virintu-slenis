@@ -316,6 +316,7 @@ function Nuoma() {
       });
 
       const result = await response.json();
+      console.log(result);
 
       if (result.success === "true" || result.success === true) {
         setSuccess(true);
