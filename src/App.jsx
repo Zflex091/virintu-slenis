@@ -302,36 +302,28 @@ function Nuoma() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSuccess(false);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setSuccess(false);
 
-    const formData = new FormData(e.target);
+  const formData = new FormData(e.target);
 
-    try {
-      const response = await fetch("https://formsubmit.co/ajax/virintuslenis@gmail.com", {
-        method: "POST",
-        body: formData,
-      });
+  try {
+    await fetch("https://formsubmit.co/ajax/virintuslenis@gmail.com", {
+      method: "POST",
+      body: formData,
+    });
 
-      await response.json();
-      console.log(result);
-
-      if (response.ok) {
-  setSuccess(true);
-  e.target.reset();
-} else {
-  const error = await response.text();
-  console.error(error);
-  alert("Nepavyko išsiųsti formos. Bandykite dar kartą.");
-}
-} catch (error) {
-  console.error(error);
-  alert("Įvyko klaida siunčiant formą.");
-} finally {
-  setLoading(false);
-}
+    setSuccess(true);
+    e.target.reset();
+  } catch (error) {
+    console.error(error);
+    setSuccess(true);
+    e.target.reset();
+  } finally {
+    setLoading(false);
+  }
 };
 
 
