@@ -315,21 +315,25 @@ function Nuoma() {
         body: formData,
       });
 
-      const result = await response.json();
+      await response.json();
       console.log(result);
 
-      if (result.success === "true" || result.success === true) {
-        setSuccess(true);
-        e.target.reset();
-      } else {
-        alert("Nepavyko išsiųsti formos. Bandykite dar kartą.");
-      }
-    } catch (error) {
-      alert("Įvyko klaida siunčiant formą.");
-    }
+      if (response.ok) {
+  setSuccess(true);
+  e.target.reset();
+} else {
+  const error = await response.text();
+  console.error(error);
+  alert("Nepavyko išsiųsti formos. Bandykite dar kartą.");
+}
+} catch (error) {
+  console.error(error);
+  alert("Įvyko klaida siunčiant formą.");
+} finally {
+  setLoading(false);
+}
+};
 
-    setLoading(false);
-  };
 
   return (
     <main className="page">
