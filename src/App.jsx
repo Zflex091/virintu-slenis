@@ -310,7 +310,7 @@ function Nuoma() {
     const formData = new FormData(e.target);
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/Lukaviciusp@gmail.com", {
+      const response = await fetch("https://formsubmit.co/ajax/virintuslenis@gmail.com", {
         method: "POST",
         body: formData,
       });
