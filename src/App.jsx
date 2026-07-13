@@ -1,22 +1,176 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, NavLink, Link } from "react-router-dom";
-import { Calendar, Mail, Phone, MapPin, Users, CheckCircle } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 import logo from "./assets/logo.png";
 
-import hero1 from "./assets/hero1.png";
-import hero2 from "./assets/hero2.png";
-import kiemas1 from "./assets/kiemas1.png";
-import kiemas2 from "./assets/kiemas2.png";
-import kiemas3 from "./assets/kiemas3.png";
-import miegamieji1 from "./assets/miegamieji1.png";
-import miegamieji2 from "./assets/miegamieji2.png";
-import vidus1 from "./assets/vidus1.png";
-import virtuve1 from "./assets/virtuve1.png";
-import vanduo1 from "./assets/vanduo1.png";
-import vonia1 from "./assets/vonia1.png";
+/*
+  SVARBU:
+  Pakeisk TAVO-EMAIL@gmail.com į tikrą el. paštą,
+  į kurį turi ateiti klientų užklausos.
+*/
+const FORM_ENDPOINT =
+  "https://formsubmit.co/ajax/TAVO-EMAIL@gmail.com";
+
+const images = {
+  // Pagrindinio puslapio fonai – dvi skirtingos nuotraukos
+  hero1:
+    "https://images.unsplash.com/photo-1783280505056-a5da631c30e7?auto=format&fit=crop&w=2200&q=88",
+
+  hero2:
+    "https://images.unsplash.com/photo-1758465212323-6e1201a553ac?auto=format&fit=crop&w=2200&q=88",
+
+  // Laistymo sistemos
+  irrigation:
+    "https://images.unsplash.com/photo-1770664945615-52203ab54c88?auto=format&fit=crop&w=1800&q=88",
+
+  // Vejos įrengimas ir priežiūra
+  lawn:
+    "https://images.unsplash.com/photo-1734303023491-db8037a21f09?auto=format&fit=crop&w=1800&q=88",
+
+  // Želdynų formavimas
+  garden:
+    "https://images.unsplash.com/photo-1767334996666-e288d67821c2?auto=format&fit=crop&w=1800&q=88",
+
+  // Augalų sodinimas ir priežiūra
+  planting:
+    "https://images.unsplash.com/photo-1769787641374-cb51b024762a?auto=format&fit=crop&w=1800&q=88",
+
+  // Medžių genėjimas
+  treePruning:
+    "https://images.unsplash.com/photo-1754322449185-31f56117ed87?auto=format&fit=crop&w=1800&q=88",
+
+  // Tujų ir gyvatvorių genėjimas
+  hedge:
+    "https://images.unsplash.com/photo-1543309959-4d45288d1629?auto=format&fit=crop&w=1800&q=88",
+
+  // Terasų ir stoginių gamyba
+  terrace:
+    "https://images.unsplash.com/photo-1734079692147-c6fc9438a2d0?auto=format&fit=crop&w=1800&q=88",
+};
+const services = [
+  {
+    id: "laistymo-sistemos",
+    number: "01",
+    title: "Laistymo sistemos",
+    short:
+      "Automatinių vejos ir želdynų laistymo sistemų projektavimas bei įrengimas.",
+    description:
+      "Įrengiame patogias ir ekonomiškas automatines laistymo sistemas vejai, augalams bei želdynams. Sistema pritaikoma konkrečiam sklypui, augalams ir kliento poreikiams.",
+    image: images.irrigation,
+    benefits: [
+      "Automatinis laistymas",
+      "Tolygus vandens paskirstymas",
+      "Mažesnės vandens sąnaudos",
+      "Individualus sistemos suplanavimas",
+    ],
+  },
+  {
+    id: "vejos-irengimas",
+    number: "02",
+    title: "Vejos įrengimas",
+    short:
+      "Grunto paruošimas, vejos sėjimas, ruloninės vejos klojimas ir priežiūra.",
+    description:
+      "Paruošiame pagrindą, išlyginame teritoriją ir įrengiame tankią bei estetišką veją. Galime įrengti tiek sėjamą, tiek ruloninę veją.",
+    image: images.lawn,
+    benefits: [
+      "Grunto paruošimas",
+      "Teritorijos lyginimas",
+      "Sėjama arba ruloninė veja",
+      "Pradinės priežiūros rekomendacijos",
+    ],
+  },
+  {
+    id: "zeldynu-formavimas",
+    number: "03",
+    title: "Želdynų formavimas",
+    short:
+      "Estetiškas augalų, dekoratyvinių zonų ir aplinkos suplanavimas.",
+    description:
+      "Formuojame funkcionalius ir estetiškus želdynus, derindami augalus, sklypo reljefą, apšvietimą ir bendrą aplinkos stilių.",
+    image: images.garden,
+    benefits: [
+      "Želdyno plano sudarymas",
+      "Augalų derinimas",
+      "Dekoratyvinių zonų formavimas",
+      "Sprendimai įvairaus dydžio sklypams",
+    ],
+  },
+  {
+    id: "augalu-sodinimas",
+    number: "04",
+    title: "Augalų sodinimas",
+    short:
+      "Medžių, krūmų, gyvatvorių ir dekoratyvinių augalų sodinimas.",
+    description:
+      "Parenkame augalams tinkamas vietas, paruošiame dirvožemį ir profesionaliai pasodiname medžius, krūmus, tujas bei kitus dekoratyvinius augalus.",
+    image: images.planting,
+    benefits: [
+      "Dirvožemio paruošimas",
+      "Tinkamas sodinimo gylis",
+      "Medžių ir krūmų sodinimas",
+      "Priežiūros rekomendacijos",
+    ],
+  },
+  {
+    id: "medziu-genejimas",
+    number: "05",
+    title: "Medžių genėjimas",
+    short:
+      "Formuojamasis, sanitarinis ir atjauninamasis medžių genėjimas.",
+    description:
+      "Genime vaismedžius ir dekoratyvinius medžius, pašaliname sausas, pažeistas arba netinkamai augančias šakas.",
+    image: images.treePruning,
+    benefits: [
+      "Sausų šakų pašalinimas",
+      "Lajos formavimas",
+      "Medžio būklės gerinimas",
+      "Tvarkingesnė sklypo išvaizda",
+    ],
+  },
+  {
+    id: "tuju-genejimas",
+    number: "06",
+    title: "Tujų genėjimas",
+    short:
+      "Tujų gyvatvorių formavimas, aukščio koregavimas ir priežiūra.",
+    description:
+      "Profesionaliai formuojame tujų gyvatvores, išlyginame šonus ir viršūnes, koreguojame aukštį bei suteikiame augalams tvarkingą formą.",
+    image: images.hedge,
+    benefits: [
+      "Gyvatvorės formavimas",
+      "Aukščio koregavimas",
+      "Šonų ir viršūnių lyginimas",
+      "Tvarkingas galutinis rezultatas",
+    ],
+  },
+  {
+    id: "terasos-stogines",
+    number: "07",
+    title: "Terasų ir stoginių gamyba",
+    short:
+      "Medinių terasų, poilsio zonų ir stoginių projektavimas bei gamyba.",
+    description:
+      "Gaminame praktiškas ir estetiškas terasas bei stogines, pritaikytas prie namo, sklypo ir užsakovo poreikių.",
+    image: images.terrace,
+    benefits: [
+      "Individualūs matmenys",
+      "Konstrukcijos paruošimas",
+      "Terasų montavimas",
+      "Stoginių gamyba",
+    ],
+  },
+];
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -28,52 +182,66 @@ function Header() {
   return (
     <header className="header">
       <Link to="/" className="logo" onClick={closeMenu}>
-        <img src={logo} alt="Virintų Slėnis" className="logoImg" />
+        <img
+          src={logo}
+          alt="Žalios Bangos"
+          className="logoImg"
+        />
       </Link>
 
       <button
         type="button"
         className={`mobileMenuBtn ${mobileOpen ? "active" : ""}`}
-        onClick={() => setMobileOpen((prev) => !prev)}
-        aria-label="Atidaryti meniu"
+        onClick={() => setMobileOpen((previous) => !previous)}
+        aria-label={mobileOpen ? "Uždaryti meniu" : "Atidaryti meniu"}
+        aria-expanded={mobileOpen}
       >
-        <span></span>
-        <span></span>
-        <span></span>
+        <span />
+        <span />
+        <span />
       </button>
 
       <nav className={`nav ${mobileOpen ? "navOpen" : ""}`}>
         <NavLink to="/" onClick={closeMenu}>
           Pagrindinis
         </NavLink>
-        <NavLink to="/sodyba" onClick={closeMenu}>
-          Sodyba
+
+        <NavLink to="/darbai" onClick={closeMenu}>
+          Darbai
         </NavLink>
-        <NavLink to="/nuoma" onClick={closeMenu}>
-          Nuoma
+
+        <NavLink to="/paslaugos" onClick={closeMenu}>
+          Paslaugos
         </NavLink>
+
         <NavLink to="/kontaktai" onClick={closeMenu}>
           Kontaktai
         </NavLink>
       </nav>
 
-      <Link to="/nuoma" className="headerBtn" onClick={closeMenu}>
-        Rezervuoti
+      <Link
+        to="/kontaktai"
+        className="headerBtn"
+        onClick={closeMenu}
+      >
+        Gauti pasiūlymą
       </Link>
     </header>
   );
 }
 
 function Home() {
-  const heroImages = [hero1, hero2];
+  const heroImages = [images.hero1, images.hero2];
   const [heroImage, setHeroImage] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setHeroImage((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
+    const interval = window.setInterval(() => {
+      setHeroImage(
+        (previous) => (previous + 1) % heroImages.length
+      );
+    }, 6000);
 
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, []);
 
   return (
@@ -81,25 +249,37 @@ function Home() {
       <section
         className="hero"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.68)), url(${heroImages[heroImage]})`,
+          backgroundImage: `
+            linear-gradient(
+              rgba(0, 0, 0, 0.42),
+              rgba(0, 0, 0, 0.76)
+            ),
+            url(${heroImages[heroImage]})
+          `,
         }}
       >
-        <div className="heroOverlay"></div>
+        <div className="heroOverlay" />
 
         <div className="heroContent" data-aos="fade-up">
-          <p className="heroTag">Kaimo sodybos nuoma</p>
-          <h1>Ramybė, gamta ir jaukus poilsis vienoje vietoje</h1>
+          <p className="heroTag">
+            Gerbūvio ir aplinkos tvarkymo darbai
+          </p>
+
+          <h1>Žalios Bangos</h1>
+
           <p className="heroText">
-            Puiki vieta savaitgaliui, šeimos poilsiui, šventei ar pabėgimui nuo
-            miesto šurmulio.
+            Kuriame tvarkingą, funkcionalią ir estetišką aplinką –
+            nuo vejos bei želdynų iki laistymo sistemų, terasų ir
+            stoginių.
           </p>
 
           <div className="heroActions">
-            <Link to="/nuoma" className="mainBtn">
-              Pateikti užklausą
+            <Link to="/kontaktai" className="mainBtn">
+              Gauti pasiūlymą
             </Link>
-            <Link to="/sodyba" className="ghostBtn">
-              Apžiūrėti sodybą
+
+            <Link to="/paslaugos" className="ghostBtn">
+              Peržiūrėti paslaugas
             </Link>
           </div>
         </div>
@@ -107,20 +287,31 @@ function Home() {
 
       <section className="aboutPreview">
         <div className="aboutText" data-aos="fade-right">
-          <h2>Sodyba gamtos apsuptyje</h2>
+          <p className="sectionTag">Apie mus</p>
+
+          <h2>Pasirūpiname jūsų aplinka nuo idėjos iki rezultato</h2>
+
+          <p>
+            Atliekame gerbūvio, apželdinimo ir aplinkos tvarkymo
+            darbus. Kiekvieną projektą planuojame individualiai,
+            atsižvelgdami į sklypo būklę, kliento poreikius ir
+            norimą galutinį rezultatą.
+          </p>
 
           <div className="features">
             <div>
               <CheckCircle />
-              <span>Privati aplinka</span>
+              <span>Individualūs sprendimai</span>
             </div>
+
             <div>
               <CheckCircle />
-              <span>Patogu šeimai ir draugams</span>
+              <span>Tvarkingas darbų atlikimas</span>
             </div>
+
             <div>
               <CheckCircle />
-              <span>Greita užklausos forma</span>
+              <span>Konsultacija ir aiškus pasiūlymas</span>
             </div>
           </div>
         </div>
@@ -129,35 +320,100 @@ function Home() {
           className="aboutImage"
           data-aos="fade-left"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,.15), rgba(0,0,0,.2)), url(${kiemas1})`,
+            backgroundImage: `
+              linear-gradient(
+                rgba(0, 0, 0, 0.08),
+                rgba(0, 0, 0, 0.2)
+              ),
+              url(${images.garden})
+            `,
           }}
-        ></div>
+        />
+      </section>
+
+      <section className="infoSection homeServices">
+        <div className="infoContainer">
+          <div className="sectionHeading" data-aos="fade-up">
+            <p className="sectionTag">Mūsų paslaugos</p>
+            <h2>Visi svarbiausi gerbūvio darbai vienoje vietoje</h2>
+            <p className="infoIntro">
+              Padėsime sukurti prižiūrėtą, patogią ir estetišką
+              aplinką prie jūsų namų ar verslo objekto.
+            </p>
+          </div>
+
+          <div className="servicesGrid">
+            {services.map((service) => (
+              <article
+                className="serviceCard"
+                key={service.id}
+                data-aos="fade-up"
+              >
+                <div
+                  className="serviceCardImage"
+                  style={{
+                    backgroundImage: `
+                      linear-gradient(
+                        to top,
+                        rgba(0, 0, 0, 0.82),
+                        rgba(0, 0, 0, 0.06)
+                      ),
+                      url(${service.image})
+                    `,
+                  }}
+                >
+                  <span className="serviceNumber">
+                    {service.number}
+                  </span>
+
+                  <h3>{service.title}</h3>
+                </div>
+
+                <div className="serviceCardContent">
+                  <p>{service.short}</p>
+
+                  <Link
+                    to="/paslaugos"
+                    className="serviceMoreLink"
+                  >
+                    Plačiau
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="centerAction">
+            <Link to="/kontaktai" className="mainBtn">
+              Aptarti projektą
+            </Link>
+          </div>
+        </div>
       </section>
     </main>
   );
 }
 
-function Sodyba() {
-  const photos = [
-    { title: "Kiemas", image: kiemas1 },
-    { title: "Kiemas", image: kiemas2 },
-    { title: "Kiemas", image: kiemas3 },
-    { title: "Vidus", image: vidus1 },
-    { title: "Virtuvė", image: virtuve1 },
-    { title: "Miegamasis", image: miegamieji1 },
-    { title: "Miegamasis", image: miegamieji2 },
-    { title: "Vonia", image: vonia1 },
-    { title: "Vandens telkinys", image: vanduo1 },
-  ];
+function Darbai() {
+  const projectPhotos = services.map((service) => ({
+    title: service.title,
+    image: service.image,
+  }));
 
   const [currentPhoto, setCurrentPhoto] = useState(0);
 
   const nextPhoto = () => {
-    setCurrentPhoto((prev) => (prev + 1) % photos.length);
+    setCurrentPhoto(
+      (previous) => (previous + 1) % projectPhotos.length
+    );
   };
 
-  const prevPhoto = () => {
-    setCurrentPhoto((prev) => (prev - 1 + photos.length) % photos.length);
+  const previousPhoto = () => {
+    setCurrentPhoto(
+      (previous) =>
+        (previous - 1 + projectPhotos.length) %
+        projectPhotos.length
+    );
   };
 
   return (
@@ -165,132 +421,112 @@ function Sodyba() {
       <section
         className="pageHero smallHero"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.78)), url(${hero2})`,
+          backgroundImage: `
+            linear-gradient(
+              rgba(0, 0, 0, 0.58),
+              rgba(0, 0, 0, 0.8)
+            ),
+            url(${images.lawn})
+          `,
         }}
       >
         <div data-aos="fade-up">
-          <p className="sectionTag">Galerija</p>
-          <h1>Sodyba</h1>
-          <p>Peržiūrėkite sodybos aplinką, vidų ir poilsio zonas.</p>
+          <p className="sectionTag">Darbų galerija</p>
+          <h1>Mūsų darbai</h1>
+          <p>
+            Gerbūvio, apželdinimo, priežiūros ir medžio darbų
+            sprendimai.
+          </p>
         </div>
       </section>
 
       <section className="sliderSection">
         <div className="photoSlider" data-aos="zoom-in">
-          <button type="button" className="sliderArrow leftArrow" onClick={prevPhoto}>
-            ‹
+          <button
+            type="button"
+            className="sliderArrow leftArrow"
+            onClick={previousPhoto}
+            aria-label="Ankstesnė nuotrauka"
+          >
+            <ChevronLeft />
           </button>
 
           <div className="sliderImage">
             <div
               className="sliderBackground"
               style={{
-                backgroundImage: `url(${photos[currentPhoto].image})`,
+                backgroundImage: `url(${projectPhotos[currentPhoto].image})`,
               }}
-            ></div>
+            />
 
             <img
-              src={photos[currentPhoto].image}
-              alt={photos[currentPhoto].title}
+              src={projectPhotos[currentPhoto].image}
+              alt={projectPhotos[currentPhoto].title}
               className="sliderPhoto"
             />
 
             <div className="sliderOverlay">
-              <h2>{photos[currentPhoto].title}</h2>
+              <h2>{projectPhotos[currentPhoto].title}</h2>
             </div>
           </div>
 
-          <button type="button" className="sliderArrow rightArrow" onClick={nextPhoto}>
-            ›
+          <button
+            type="button"
+            className="sliderArrow rightArrow"
+            onClick={nextPhoto}
+            aria-label="Kita nuotrauka"
+          >
+            <ChevronRight />
           </button>
         </div>
 
         <div className="sliderDots">
-          {photos.map((_, index) => (
+          {projectPhotos.map((photo, index) => (
             <button
               type="button"
-              key={index}
+              key={`${photo.title}-${index}`}
               onClick={() => setCurrentPhoto(index)}
-              className={currentPhoto === index ? "activeDot" : ""}
-            ></button>
+              className={
+                currentPhoto === index ? "activeDot" : ""
+              }
+              aria-label={`Rodyti: ${photo.title}`}
+            />
           ))}
         </div>
       </section>
 
       <section className="infoSection">
         <div className="infoContainer">
-          <h2>„Virintų Slėnis“</h2>
-
-          <p className="infoIntro">
-            Išnuomojama visiškai nauja kaimo turizmo sodyba Molėtų rajone,
-            Verbiškių kaime. Sodyba įsikūrusi tarp Virintų ežero ir Virinta
-            upės, ant tvenkinių kranto, todėl čia galėsite mėgautis visiška
-            ramybe ir gamtos apsuptimi.
-          </p>
+          <div className="sectionHeading">
+            <p className="sectionTag">Darbų sritys</p>
+            <h2>Kokius projektus atliekame?</h2>
+            <p className="infoIntro">
+              Atliekame tiek pavienius aplinkos tvarkymo darbus,
+              tiek išsamesnius projektus, apimančius kelias
+              skirtingas paslaugas.
+            </p>
+          </div>
 
           <div className="infoGrid">
             <div className="infoCard">
-              <h3>Ką rasite sodyboje?</h3>
+              <h3>Apželdinimas</h3>
               <ul>
-                <li>✔ Aptverta privati teritorija</li>
-                <li>✔ Krepšinio aikštelė</li>
-                <li>✔ Vaikų žaidimų aikštelė</li>
-                <li>✔ Didelis lieptas su gultais</li>
-                <li>✔ Valtis žvejybai</li>
-                <li>✔ Irklentė</li>
-                <li>✔ Šašlykinė</li>
-                <li>✔ Anglys ir malkos</li>
+                <li>✔ Vejos įrengimas</li>
+                <li>✔ Augalų sodinimas</li>
+                <li>✔ Želdynų formavimas</li>
+                <li>✔ Gyvatvorių priežiūra</li>
               </ul>
             </div>
 
             <div className="infoCard">
-              <h3>Į kainą įskaičiuota</h3>
+              <h3>Inžineriniai ir medžio darbai</h3>
               <ul>
-                <li>✔ Kubilas / Jacuzzi</li>
-                <li>✔ Malkos kubilui</li>
-                <li>✔ Anglys</li>
-                <li>✔ Valtis</li>
-                <li>✔ Irklentė</li>
-                <li>✔ Gultai</li>
-                <li>✔ Hamakas</li>
-                <li>✔ Supynės</li>
-                <li>✔ Patalynė</li>
-                <li>✔ Rankšluosčiai</li>
+                <li>✔ Laistymo sistemų įrengimas</li>
+                <li>✔ Terasų gamyba</li>
+                <li>✔ Stoginių gamyba</li>
+                <li>✔ Medžių ir tujų genėjimas</li>
               </ul>
             </div>
-          </div>
-
-          <div className="priceBox">
-            <h2>Kainos</h2>
-
-            <div className="priceItem">
-              <h3>6–7 vietų namelis</h3>
-              <p>500 € / savaitgalis</p>
-              <small>Su Jacuzzi / kubilu – 570 €</small>
-            </div>
-
-            <div className="priceItem">
-              <h3>2–4 vietų namelis</h3>
-              <p>300 € / savaitgalis</p>
-              <small>Su Ofūro Jacuzzi – 360 €</small>
-            </div>
-          </div>
-
-          <div className="aboutTextBlock">
-            <h2>Kodėl verta rinktis mus?</h2>
-
-            <p>
-              Čia mėgausitės visišku privatumu ir ramybe. Jūsų laukia privati
-              tvenkinio pakrantė, maudykla upėje, jaukus kubilas po atviru
-              dangumi, aptverta teritorija, krepšinio aikštelė, vaikų žaidimų
-              zona ir visas komfortas kokybiškam poilsiui.
-            </p>
-
-            <p>
-              Galima rezervuoti abu namelius vienai kompanijai. Iš viso – 9
-              miegamos vietos. Taip pat taikomos nuolaidos ilgesniems
-              apsistojimams.
-            </p>
           </div>
         </div>
       </section>
@@ -298,93 +534,270 @@ function Sodyba() {
   );
 }
 
-function Nuoma() {
+function Paslaugos() {
+  return (
+    <main className="page">
+      <section
+        className="pageHero smallHero"
+        style={{
+          backgroundImage: `
+            linear-gradient(
+              rgba(0, 0, 0, 0.58),
+              rgba(0, 0, 0, 0.82)
+            ),
+            url(${images.garden})
+          `,
+        }}
+      >
+        <div data-aos="fade-up">
+          <p className="sectionTag">Ką atliekame</p>
+          <h1>Paslaugos</h1>
+          <p>
+            Gerbūvio, apželdinimo ir aplinkos priežiūros
+            sprendimai.
+          </p>
+        </div>
+      </section>
+
+      <section className="infoSection">
+        <div className="infoContainer">
+          <div className="sectionHeading" data-aos="fade-up">
+            <p className="sectionTag">Žalios Bangos</p>
+            <h2>Paslaugos jūsų sklypui</h2>
+            <p className="infoIntro">
+              Paslaugas galime atlikti atskirai arba sudaryti bendrą
+              darbų planą visai teritorijai.
+            </p>
+          </div>
+
+          <div className="servicesList">
+            {services.map((service, index) => (
+              <article
+                id={service.id}
+                className="serviceDetail"
+                key={service.id}
+                data-aos="fade-up"
+              >
+                <div
+                  className="serviceDetailImage"
+                  style={{
+                    backgroundImage: `
+                      linear-gradient(
+                        rgba(0, 0, 0, 0.08),
+                        rgba(0, 0, 0, 0.28)
+                      ),
+                      url(${service.image})
+                    `,
+                  }}
+                />
+
+                <div className="serviceDetailContent">
+                  <span className="serviceNumber">
+                    {service.number}
+                  </span>
+
+                  <h2>{service.title}</h2>
+                  <p>{service.description}</p>
+
+                  <ul>
+                    {service.benefits.map((benefit) => (
+                      <li key={benefit}>
+                        <CheckCircle />
+                        <span>{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link to="/kontaktai" className="serviceMoreLink">
+                    Gauti pasiūlymą
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function Kontaktai() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setSuccess(false);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const formData = new FormData(e.target);
+    const form = event.currentTarget;
 
-  try {
-    await fetch("https://formsubmit.co/ajax/virintuslenis@gmail.com", {
-      method: "POST",
-      body: formData,
-    });
+    setLoading(true);
+    setSuccess(false);
+    setErrorMessage("");
 
-    setSuccess(true);
-    e.target.reset();
-  } catch (error) {
-    console.error(error);
-    setSuccess(true);
-    e.target.reset();
-  } finally {
-    setLoading(false);
-  }
-};
+    const formData = new FormData(form);
 
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Formos nepavyko išsiųsti.");
+      }
+
+      setSuccess(true);
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(
+        "Nepavyko išsiųsti užklausos. Prašome bandyti dar kartą arba susisiekti telefonu."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="page">
-      <section className="formSection cleanFormSection">
-        <div className="formHeader" data-aos="fade-up">
-          <p className="sectionTag">Rezervacija</p>
-          <h1>Pateikite užklausą</h1>
-          <p>
-            Užpildykite formą ir mes susisieksime dėl laisvų datų, kainos bei
-            papildomų paslaugų.
+      <section className="contactSection">
+        <div className="contactInfo" data-aos="fade-right">
+          <p className="sectionTag">Susisiekite</p>
+          <h1>Gaukite pasiūlymą</h1>
+
+          <p className="contactIntro">
+            Trumpai aprašykite reikalingus darbus. Susisieksime,
+            aptarsime situaciją ir pateiksime pasiūlymą.
           </p>
+
+          <div className="contactLine">
+            <Phone />
+            <div>
+              <h3>Telefonas</h3>
+              <a href="tel:+37060000000">
+                +370 600 00000
+              </a>
+            </div>
+          </div>
+
+          <div className="contactLine">
+            <Mail />
+            <div>
+              <h3>El. paštas</h3>
+              <a href="mailto:TAVO-EMAIL@gmail.com">
+                TAVO-EMAIL@gmail.com
+              </a>
+            </div>
+          </div>
+
+          <div className="contactLine">
+            <MapPin />
+            <div>
+              <h3>Darbo teritorija</h3>
+              <p>Lietuva ir aplinkiniai regionai</p>
+            </div>
+          </div>
         </div>
 
-        <form className="bookingForm cleanBookingForm" data-aos="fade-up" onSubmit={handleSubmit}>
-          <input type="hidden" name="_subject" value="Nauja sodybos nuomos užklausa" />
-          <input type="hidden" name="_captcha" value="false" />
+        <form
+          className="bookingForm cleanBookingForm"
+          data-aos="fade-left"
+          onSubmit={handleSubmit}
+        >
+          <input
+            type="hidden"
+            name="_subject"
+            value="Nauja užklausa – Žalios Bangos"
+          />
 
-          <div className="formGroup">
-            <label>Atvykimo data *</label>
-            <div className="inputIcon">
-              <Calendar size={18} />
-              <input type="date" name="Atvykimo data" required />
-            </div>
-          </div>
+          <input
+            type="hidden"
+            name="_captcha"
+            value="false"
+          />
 
-          <div className="formGroup">
-            <label>Išvykimo data *</label>
-            <div className="inputIcon">
-              <Calendar size={18} />
-              <input type="date" name="Išvykimo data" required />
-            </div>
-          </div>
+          <input
+            type="text"
+            name="Vardas ir pavardė"
+            placeholder="Vardas ir pavardė*"
+            autoComplete="name"
+            required
+          />
 
-          <div className="inputIcon">
-            <Users size={18} />
-            <select name="Svečių skaičius" required>
-              <option value="">Svečių skaičius*</option>
-              <option>1–2</option>
-              <option>3–5</option>
-              <option>6–10</option>
-              <option>10+</option>
-            </select>
-          </div>
-
-          <input name="Vardas ir pavardė" placeholder="Vardas ir pavardė*" required />
-          <input name="Telefono numeris" placeholder="Tel. nr.*" required />
+          <input
+            type="tel"
+            name="Telefono numeris"
+            placeholder="Telefono numeris*"
+            autoComplete="tel"
+            required
+          />
 
           <div className="inputIcon">
             <Mail size={18} />
-            <input type="email" name="El. paštas" placeholder="El. paštas*" required />
+
+            <input
+              type="email"
+              name="El. paštas"
+              placeholder="El. paštas*"
+              autoComplete="email"
+              required
+            />
           </div>
 
+          <select
+            name="Dominanti paslauga"
+            defaultValue=""
+            required
+          >
+            <option value="" disabled>
+              Pasirinkite paslaugą*
+            </option>
+
+            {services.map((service) => (
+              <option
+                value={service.title}
+                key={service.id}
+              >
+                {service.title}
+              </option>
+            ))}
+
+            <option value="Kelios paslaugos">
+              Kelios paslaugos
+            </option>
+          </select>
+
+          <input
+            type="text"
+            name="Objekto vieta"
+            placeholder="Miestas arba objekto vieta"
+          />
+
+          <textarea
+            name="Užklausos aprašymas"
+            placeholder="Trumpai aprašykite reikalingus darbus*"
+            rows="6"
+            required
+          />
+
           <button type="submit" disabled={loading}>
-            {loading ? "Siunčiama..." : "Pateikti užklausą"}
+            {loading ? "Siunčiama..." : "Siųsti užklausą"}
           </button>
 
           {success && (
-            <div className="successBox">
-              Forma sėkmingai išsiųsta! Susisieksime su Jumis artimiausiu metu.
+            <div className="successBox" role="status">
+              Užklausa sėkmingai išsiųsta. Susisieksime su jumis
+              artimiausiu metu.
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="errorBox" role="alert">
+              {errorMessage}
             </div>
           )}
         </form>
@@ -393,83 +806,63 @@ const handleSubmit = async (e) => {
   );
 }
 
-function Kontaktai() {
-  return (
-    <main className="page">
-      <section className="contactSection">
-        <div className="contactInfo" data-aos="fade-right">
-          <p className="sectionTag">Susisiekite</p>
-          <h1>Kontaktai</h1>
-
-          <div className="contactLine">
-            <Phone />
-            <div>
-              <h3>Telefonas</h3>
-              <p>+370 600 66004</p>
-            </div>
-          </div>
-
-          <div className="contactLine">
-            <Mail />
-            <div>
-              <h3>El. paštas</h3>
-              <p>virintuslenis@gmail.com</p>
-            </div>
-          </div>
-
-          <div className="contactLine">
-            <MapPin />
-            <div>
-              <h3>Adresas</h3>
-              <p>Paupio g. 1A, Verbiškių k., Molėtų rajonas</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mapBox" data-aos="fade-left">
-          <iframe
-            title="Sodybos vieta"
-            src="https://www.google.com/maps?q=Paupio+g.+1A,+Verbi%C5%A1ki%C5%B3+k.,+Mol%C4%97t%C5%B3+rajonas&output=embed"
-            loading="lazy"
-            allowFullScreen
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      </section>
-    </main>
-  );
-}
-
 function Footer() {
   return (
     <footer className="footer">
-      <p>VIRINTŲ SLĖNIS</p>
-      <p>Rami vieta jūsų poilsiui gamtos apsuptyje.</p>
-      <small>© 2026 Visos teisės saugomos.</small>
+      <p>ŽALIOS BANGOS</p>
+      <p>
+        Gerbūvio, apželdinimo ir aplinkos tvarkymo darbai.
+      </p>
 
-      
+      <div className="footerLinks">
+        <Link to="/">Pagrindinis</Link>
+        <Link to="/darbai">Darbai</Link>
+        <Link to="/paslaugos">Paslaugos</Link>
+        <Link to="/kontaktai">Kontaktai</Link>
+      </div>
+
+      <small>
+        © {new Date().getFullYear()} Žalios Bangos. Visos teisės
+        saugomos.
+      </small>
     </footer>
   );
+}
+
+function ScrollToTop() {
+  const location = window.location;
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  }, [location.pathname]);
+
+  return null;
 }
 
 export default function App() {
   useEffect(() => {
     AOS.init({
-      duration: 900,
+      duration: 850,
       once: true,
-      offset: 80,
+      offset: 70,
+      easing: "ease-out-cubic",
     });
   }, []);
 
   return (
     <>
+      <ScrollToTop />
       <Header />
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/sodyba" element={<Sodyba />} />
-        <Route path="/nuoma" element={<Nuoma />} />
+        <Route path="/darbai" element={<Darbai />} />
+        <Route path="/paslaugos" element={<Paslaugos />} />
         <Route path="/kontaktai" element={<Kontaktai />} />
+        <Route path="*" element={<Home />} />
       </Routes>
 
       <Footer />
