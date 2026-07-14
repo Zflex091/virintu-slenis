@@ -13,6 +13,20 @@ import "aos/dist/aos.css";
 
 import logo from "./assets/logo.png";
 
+import sistema from "./assets/sistema.png";
+import veja from "./assets/veja.png";
+import veja2 from "./assets/veja2.png";
+import zeldynai from "./assets/zeldynai.png";
+import zeldynai2 from "./assets/zeldynai2.png";
+import sodinimas from "./assets/sodinimas.png";
+import sodinimas2 from "./assets/sodinimas2.png";
+import genejimas from "./assets/genejimas.png";
+import tujos from "./assets/tujos.png";
+import tujos2 from "./assets/tujos2.png";
+import terasa from "./assets/terasa.png";
+import terasa2 from "./assets/terasa2.png";
+import stogines from "./assets/stogines.png";
+
 /*
   SVARBU:
   Pakeisk TAVO-EMAIL@gmail.com į tikrą el. paštą,
@@ -22,40 +36,15 @@ const FORM_ENDPOINT =
   "https://formsubmit.co/ajax/TAVO-EMAIL@gmail.com";
 
 const images = {
-  // Pagrindinio puslapio fonai – dvi skirtingos nuotraukos
-  hero1:
-    "https://images.unsplash.com/photo-1783280505056-a5da631c30e7?auto=format&fit=crop&w=2200&q=88",
-
-  hero2:
-    "https://images.unsplash.com/photo-1758465212323-6e1201a553ac?auto=format&fit=crop&w=2200&q=88",
-
-  // Laistymo sistemos
-  irrigation:
-    "https://images.unsplash.com/photo-1770664945615-52203ab54c88?auto=format&fit=crop&w=1800&q=88",
-
-  // Vejos įrengimas ir priežiūra
-  lawn:
-    "https://images.unsplash.com/photo-1734303023491-db8037a21f09?auto=format&fit=crop&w=1800&q=88",
-
-  // Želdynų formavimas
-  garden:
-    "https://images.unsplash.com/photo-1767334996666-e288d67821c2?auto=format&fit=crop&w=1800&q=88",
-
-  // Augalų sodinimas ir priežiūra
-  planting:
-    "https://images.unsplash.com/photo-1769787641374-cb51b024762a?auto=format&fit=crop&w=1800&q=88",
-
-  // Medžių genėjimas
-  treePruning:
-    "https://images.unsplash.com/photo-1754322449185-31f56117ed87?auto=format&fit=crop&w=1800&q=88",
-
-  // Tujų ir gyvatvorių genėjimas
-  hedge:
-    "https://images.unsplash.com/photo-1543309959-4d45288d1629?auto=format&fit=crop&w=1800&q=88",
-
-  // Terasų ir stoginių gamyba
-  terrace:
-    "https://images.unsplash.com/photo-1734079692147-c6fc9438a2d0?auto=format&fit=crop&w=1800&q=88",
+  hero1: veja2,
+  hero2: zeldynai2,
+  irrigation: sistema,
+  lawn: veja,
+  garden: zeldynai,
+  planting: sodinimas,
+  treePruning: genejimas,
+  hedge: tujos,
+  terrace: terasa,
 };
 const services = [
   {
@@ -395,10 +384,21 @@ function Home() {
 }
 
 function Darbai() {
-  const projectPhotos = services.map((service) => ({
-    title: service.title,
-    image: service.image,
-  }));
+  const projectPhotos = [
+    { title: "Laistymo sistemos", image: sistema },
+    { title: "Vejos įrengimas", image: veja },
+    { title: "Vejos įrengimas", image: veja2 },
+    { title: "Želdynų formavimas", image: zeldynai },
+    { title: "Želdynų formavimas", image: zeldynai2 },
+    { title: "Augalų sodinimas", image: sodinimas },
+    { title: "Augalų sodinimas", image: sodinimas2 },
+    { title: "Medžių genėjimas", image: genejimas },
+    { title: "Tujų genėjimas", image: tujos },
+    { title: "Tujų genėjimas", image: tujos2 },
+    { title: "Terasų gamyba", image: terasa },
+    { title: "Terasų gamyba", image: terasa2 },
+    { title: "Stoginių gamyba", image: stogines },
+  ];
 
   const [currentPhoto, setCurrentPhoto] = useState(0);
 
