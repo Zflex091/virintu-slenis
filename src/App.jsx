@@ -33,7 +33,7 @@ import stogines from "./assets/stogines.png";
   į kurį turi ateiti klientų užklausos.
 */
 const FORM_ENDPOINT =
-  "https://formsubmit.co/ajax/TAVO-EMAIL@gmail.com";
+  "https://formsubmit.co/ajax/zaliosbangos@gmail.com";
 
 const images = {
   hero1: veja2,
@@ -699,8 +699,8 @@ function Kontaktai() {
             <Mail />
             <div>
               <h3>El. paštas</h3>
-              <a href="mailto:TAVO-EMAIL@gmail.com">
-                TAVO-EMAIL@gmail.com
+              <a href="mailto:Zaliosbangos@gmail.com">
+                Zaliosbangos@gmail.com
               </a>
             </div>
           </div>
