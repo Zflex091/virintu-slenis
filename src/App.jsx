@@ -388,7 +388,6 @@ function Darbai() {
     { title: "Laistymo sistemos", image: sistema },
     { title: "Vejos įrengimas", image: veja },
     { title: "Vejos įrengimas", image: veja2 },
-    { title: "Vejos įrengimas", image: veja3, type: "video",},
     { title: "Želdynų formavimas", image: zeldynai },
     { title: "Želdynų formavimas", image: zeldynai2 },
     { title: "Augalų sodinimas", image: sodinimas },
