@@ -12,7 +12,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import logo from "./assets/logo.png";
-
+import veja3 from "./assets/veja3.mp4";
 import sistema from "./assets/sistema.png";
 import veja from "./assets/veja.png";
 import veja2 from "./assets/veja2.png";
@@ -388,6 +388,7 @@ function Darbai() {
     { title: "Laistymo sistemos", image: sistema },
     { title: "Vejos įrengimas", image: veja },
     { title: "Vejos įrengimas", image: veja2 },
+    { title: "Vejos įrengimas", image: veja3, type: "video",},
     { title: "Želdynų formavimas", image: zeldynai },
     { title: "Želdynų formavimas", image: zeldynai2 },
     { title: "Augalų sodinimas", image: sodinimas },
@@ -459,11 +460,22 @@ function Darbai() {
               }}
             />
 
-            <img
-              src={projectPhotos[currentPhoto].image}
-              alt={projectPhotos[currentPhoto].title}
-              className="sliderPhoto"
-            />
+            {projectPhotos[currentPhoto].type === "video" ? (
+  <video
+    src={projectPhotos[currentPhoto].image}
+    className="sliderPhoto"
+    autoPlay
+    muted
+    loop
+    playsInline
+  />
+) : (
+  <img
+    src={projectPhotos[currentPhoto].image}
+    alt={projectPhotos[currentPhoto].title}
+    className="sliderPhoto"
+  />
+)}
 
             <div className="sliderOverlay">
               <h2>{projectPhotos[currentPhoto].title}</h2>
