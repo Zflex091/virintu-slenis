@@ -689,8 +689,8 @@ function Kontaktai() {
             <Phone />
             <div>
               <h3>Telefonas</h3>
-              <a href="tel:+37060000000">
-                +370 600 00000
+              <a href="tel:+370 606 80411">
+                +370 606 80411
               </a>
             </div>
           </div>
